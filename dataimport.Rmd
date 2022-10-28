@@ -1,0 +1,416 @@
+---
+title: "96-well_GrowthCurve"
+author: "MT"
+date: '2022-09-26'
+output: html_document
+---
+
+
+
+```{r}
+library(ggplot2)
+library(readxl)
+library(ggpubr)
+library(skimr)
+library(DataExplorer)
+library(tidyverse)
+library(tibble)
+library(dplyr)
+library(plyr)
+```
+
+## Importing Data
+
+```{r}
+
+control <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B56:AW59", col_names = FALSE) ## could probably find a way to loop this? Would have to use intergers, maybe an index as naming though
+control <- t(control)
+colnames(control) <- c("time","temp", "mean", "stdev")
+control <- as.data.frame(control)
+control$id <- as.factor(rep("control",48))
+
+LZ25.1.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B176:AW179", col_names = FALSE)
+LZ25.1.100 <- t(LZ25.1.100)
+colnames(LZ25.1.100) <- c("time","temp", "mean", "stdev")
+LZ25.1.100 <- as.data.frame(LZ25.1.100)
+LZ25.1.100$id <- as.factor(rep("LZ25.1.100",48))
+
+LZ25.2.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B186:AW189", col_names = FALSE)
+LZ25.2.100 <- t(LZ25.2.100)
+colnames(LZ25.2.100) <- c("time","temp", "mean", "stdev")
+LZ25.2.100 <- as.data.frame(LZ25.2.100)
+LZ25.2.100$id <- as.factor(rep("LZ25.2.100",48))
+
+LZ25.3.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B196:AW199", col_names = FALSE)
+LZ25.3.100 <- t(LZ25.3.100)
+colnames(LZ25.3.100) <- c("time","temp", "mean", "stdev")
+LZ25.3.100 <- as.data.frame(LZ25.3.100)
+LZ25.3.100$id <- as.factor(rep("LZ25.3.100",48))
+
+LZ28.1.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B206:AW209", col_names = FALSE)
+LZ28.1.100 <- t(LZ28.1.100)
+colnames(LZ28.1.100) <- c("time","temp", "mean", "stdev")
+LZ28.1.100 <- as.data.frame(LZ28.1.100)
+LZ28.1.100$id <- as.factor(rep("LZ28.1.100",48))
+
+LZ28.2.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B216:AW219", col_names = FALSE)
+LZ28.2.100 <- t(LZ28.2.100)
+colnames(LZ28.2.100) <- c("time","temp", "mean", "stdev")
+LZ28.2.100 <- as.data.frame(LZ28.2.100)
+LZ28.2.100$id <- as.factor(rep("LZ28.2.100",48))
+
+LZ28.3.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B226:AW229", col_names = FALSE)
+LZ28.3.100 <- t(LZ28.3.100)
+colnames(LZ28.3.100) <- c("time","temp", "mean", "stdev")
+LZ28.3.100 <- as.data.frame(LZ28.3.100)
+LZ28.3.100$id <- as.factor(rep("LZ28.3.100",48))
+
+LZ29.1.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B236:AW239", col_names = FALSE)
+LZ29.1.100 <- t(LZ29.1.100)
+colnames(LZ29.1.100) <- c("time","temp", "mean", "stdev")
+LZ29.1.100 <- as.data.frame(LZ29.1.100)
+LZ29.1.100$id <- as.factor(rep("LZ29.1.100",48))
+
+LZ29.2.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B246:AW249", col_names = FALSE)
+LZ29.2.100 <- t(LZ29.2.100)
+colnames(LZ29.2.100) <- c("time","temp", "mean", "stdev")
+LZ29.2.100 <- as.data.frame(LZ29.2.100)
+LZ29.2.100$id <- as.factor(rep("LZ29.2.100",48))
+
+LZ29.3.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B256:AW259", col_names = FALSE)
+LZ29.3.100 <- t(LZ29.3.100)
+colnames(LZ29.3.100) <- c("time","temp", "mean", "stdev")
+LZ29.3.100 <- as.data.frame(LZ29.3.100)
+LZ29.3.100$id <- as.factor(rep("LZ29.3.100",48))
+
+LZ30.1.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B266:AW269", col_names = FALSE)
+LZ30.1.100 <- t(LZ30.1.100)
+colnames(LZ30.1.100) <- c("time","temp", "mean", "stdev")
+LZ30.1.100 <- as.data.frame(LZ30.1.100)
+LZ30.1.100$id <- as.factor(rep("LZ30.1.100",48))
+
+LZ30.2.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B276:AW279", col_names = FALSE)
+LZ30.2.100 <- t(LZ30.2.100)
+colnames(LZ30.2.100) <- c("time","temp", "mean", "stdev")
+LZ30.2.100 <- as.data.frame(LZ30.2.100)
+LZ30.2.100$id <- as.factor(rep("LZ30.2.100",48))
+
+LZ30.3.100 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B286:AW289", col_names = FALSE)
+LZ30.3.100 <- t(LZ30.3.100)
+colnames(LZ30.3.100) <- c("time","temp", "mean", "stdev")
+LZ30.3.100 <- as.data.frame(LZ30.3.100)
+LZ30.3.100$id <- as.factor(rep("LZ30.3.100",48))
+
+LZ.100 <- rbind(control,LZ25.1.100,LZ25.2.100,LZ25.3.100, LZ28.1.100, LZ28.2.100, LZ28.3.100, LZ29.1.100, LZ29.2.100,LZ29.3.100,LZ30.1.100, LZ30.2.100, LZ30.3.100)
+
+LZ.100$id <- as.factor(LZ.100$id)
+
+p1 <- ggplot(data=LZ.100, mapping = aes(x= time, y= mean, color = id)) + geom_line() 
+p1
+
+ggsave("1_100growth.png", plot = last_plot(), )
+
+```
+
+
+
+### 1:200
+
+```{r}
+
+LZ25.1.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B296:AW299", col_names = FALSE)
+LZ25.1.200 <- t(LZ25.1.200)
+colnames(LZ25.1.200) <- c("time","temp", "mean", "stdev")
+LZ25.1.200 <- as.data.frame(LZ25.1.200)
+LZ25.1.200$id <- as.factor(rep("LZ25.1.200",48))
+
+LZ25.2.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B306:AW309", col_names = FALSE)
+LZ25.2.200 <- t(LZ25.2.200)
+colnames(LZ25.2.200) <- c("time","temp", "mean", "stdev")
+LZ25.2.200 <- as.data.frame(LZ25.2.200)
+LZ25.2.200$id <- as.factor(rep("LZ25.2.200",48))
+
+LZ25.3.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B316:AW319", col_names = FALSE)
+LZ25.3.200 <- t(LZ25.3.200)
+colnames(LZ25.3.200) <- c("time","temp", "mean", "stdev")
+LZ25.3.200 <- as.data.frame(LZ25.3.200)
+LZ25.3.200$id <- as.factor(rep("LZ25.3.200",48))
+
+LZ28.1.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B326:AW329", col_names = FALSE)
+LZ28.1.200 <- t(LZ28.1.200)
+colnames(LZ28.1.200) <- c("time","temp", "mean", "stdev")
+LZ28.1.200 <- as.data.frame(LZ28.1.200)
+LZ28.1.200$id <- as.factor(rep("LZ28.1.200",48))
+
+LZ28.2.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B336:AW339", col_names = FALSE)
+LZ28.2.200 <- t(LZ28.2.200)
+colnames(LZ28.2.200) <- c("time","temp", "mean", "stdev")
+LZ28.2.200 <- as.data.frame(LZ28.2.200)
+LZ28.2.200$id <- as.factor(rep("LZ28.2.200",48))
+
+LZ28.3.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B346:AW349", col_names = FALSE)
+LZ28.3.200 <- t(LZ28.3.200)
+colnames(LZ28.3.200) <- c("time","temp", "mean", "stdev")
+LZ28.3.200 <- as.data.frame(LZ28.3.200)
+LZ28.3.200$id <- as.factor(rep("LZ28.3.200",48))
+
+LZ29.1.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B356:AW359", col_names = FALSE)
+LZ29.1.200 <- t(LZ29.1.200)
+colnames(LZ29.1.200) <- c("time","temp", "mean", "stdev")
+LZ29.1.200 <- as.data.frame(LZ29.1.200)
+LZ29.1.200$id <- as.factor(rep("LZ29.1.200",48))
+
+LZ29.2.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B366:AW369", col_names = FALSE)
+LZ29.2.200 <- t(LZ29.2.200)
+colnames(LZ29.2.200) <- c("time","temp", "mean", "stdev")
+LZ29.2.200 <- as.data.frame(LZ29.2.200)
+LZ29.2.200$id <- as.factor(rep("LZ29.2.200",48))
+
+LZ29.3.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B376:AW379", col_names = FALSE)
+LZ29.3.200 <- t(LZ29.3.200)
+colnames(LZ29.3.200) <- c("time","temp", "mean", "stdev")
+LZ29.3.200 <- as.data.frame(LZ29.3.200)
+LZ29.3.200$id <- as.factor(rep("LZ29.3.200",48))
+
+LZ30.1.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B386:AW389", col_names = FALSE)
+LZ30.1.200 <- t(LZ30.1.200)
+colnames(LZ30.1.200) <- c("time","temp", "mean", "stdev")
+LZ30.1.200 <- as.data.frame(LZ30.1.200)
+LZ30.1.200$id <- as.factor(rep("LZ30.1.200",48))
+
+LZ30.2.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B396:AW399", col_names = FALSE)
+LZ30.2.200 <- t(LZ30.2.200)
+colnames(LZ30.2.200) <- c("time","temp", "mean", "stdev")
+LZ30.2.200 <- as.data.frame(LZ30.2.200)
+LZ30.2.200$id <- as.factor(rep("LZ30.2.200",48))
+
+LZ30.3.200 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B406:AW409", col_names = FALSE)
+LZ30.3.200 <- t(LZ30.3.200)
+colnames(LZ30.3.200) <- c("time","temp", "mean", "stdev")
+LZ30.3.200 <- as.data.frame(LZ30.3.200)
+LZ30.3.200$id <- as.factor(rep("LZ30.3.200",48))
+```
+
+### 1:300
+
+```{r}
+
+LZ25.1.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B416:AW419", col_names = FALSE)
+LZ25.1.300 <- t(LZ25.1.300)
+colnames(LZ25.1.300) <- c("time","temp", "mean", "stdev")
+LZ25.1.300 <- as.data.frame(LZ25.1.300)
+LZ25.1.300$id <- as.factor(rep("LZ25.1.300",48))
+
+LZ25.2.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B426:AW429", col_names = FALSE)
+LZ25.2.300 <- t(LZ25.2.300)
+colnames(LZ25.2.300) <- c("time","temp", "mean", "stdev")
+LZ25.2.300 <- as.data.frame(LZ25.2.300)
+LZ25.2.300$id <- as.factor(rep("LZ25.2.300",48))
+
+LZ25.3.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B436:AW439", col_names = FALSE)
+LZ25.3.300 <- t(LZ25.3.300)
+colnames(LZ25.3.300) <- c("time","temp", "mean", "stdev")
+LZ25.3.300 <- as.data.frame(LZ25.3.300)
+LZ25.3.300$id <- as.factor(rep("LZ25.3.300",48))
+
+LZ28.1.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B446:AW449", col_names = FALSE)
+LZ28.1.300 <- t(LZ28.1.300)
+colnames(LZ28.1.300) <- c("time","temp", "mean", "stdev")
+LZ28.1.300 <- as.data.frame(LZ28.1.300)
+LZ28.1.300$id <- as.factor(rep("LZ28.1.300",48))
+
+LZ28.2.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B456:AW459", col_names = FALSE)
+LZ28.2.300 <- t(LZ28.2.300)
+colnames(LZ28.2.300) <- c("time","temp", "mean", "stdev")
+LZ28.2.300 <- as.data.frame(LZ28.2.300)
+LZ28.2.300$id <- as.factor(rep("LZ28.2.300",48))
+
+LZ28.3.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B466:AW469", col_names = FALSE)
+LZ28.3.300 <- t(LZ28.3.300)
+colnames(LZ28.3.300) <- c("time","temp", "mean", "stdev")
+LZ28.3.300 <- as.data.frame(LZ28.3.300)
+LZ28.3.300$id <- as.factor(rep("LZ28.3.300",48))
+
+LZ29.1.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B476:AW479", col_names = FALSE)
+LZ29.1.300 <- t(LZ29.1.300)
+colnames(LZ29.1.300) <- c("time","temp", "mean", "stdev")
+LZ29.1.300 <- as.data.frame(LZ29.1.300)
+LZ29.1.300$id <- as.factor(rep("LZ29.1.300",48))
+
+LZ29.2.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B486:AW489", col_names = FALSE)
+LZ29.2.300 <- t(LZ29.2.300)
+colnames(LZ29.2.300) <- c("time","temp", "mean", "stdev")
+LZ29.2.300 <- as.data.frame(LZ29.2.300)
+LZ29.2.300$id <- as.factor(rep("LZ29.2.300",48))
+
+LZ29.3.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B496:AW499", col_names = FALSE)
+LZ29.3.300 <- t(LZ29.3.300)
+colnames(LZ29.3.300) <- c("time","temp", "mean", "stdev")
+LZ29.3.300 <- as.data.frame(LZ29.3.300)
+LZ29.3.300$id <- as.factor(rep("LZ29.3.300",48))
+
+LZ30.1.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B506:AW509", col_names = FALSE)
+LZ30.1.300 <- t(LZ30.1.300)
+colnames(LZ30.1.300) <- c("time","temp", "mean", "stdev")
+LZ30.1.300 <- as.data.frame(LZ30.1.300)
+LZ30.1.300$id <- as.factor(rep("LZ30.1.300",48))
+
+LZ30.2.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B516:AW519", col_names = FALSE)
+LZ30.2.300 <- t(LZ30.2.300)
+colnames(LZ30.2.300) <- c("time","temp", "mean", "stdev")
+LZ30.2.300 <- as.data.frame(LZ30.2.300)
+LZ30.2.300$id <- as.factor(rep("LZ30.2.300",48))
+
+LZ30.3.300 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B526:AW529", col_names = FALSE)
+LZ30.3.300 <- t(LZ30.3.300)
+colnames(LZ30.3.300) <- c("time","temp", "mean", "stdev")
+LZ30.3.300 <- as.data.frame(LZ30.3.300)
+LZ30.3.300$id <- as.factor(rep("LZ30.3.300",48))
+```
+
+### 1:400
+
+```{r}
+LZ25.1.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B536:AW539", col_names = FALSE)
+LZ25.1.400 <- t(LZ25.1.400)
+colnames(LZ25.1.400) <- c("time","temp", "mean", "stdev")
+LZ25.1.400 <- as.data.frame(LZ25.1.400)
+LZ25.1.400$id <- as.factor(rep("LZ25.1.400",48))
+
+LZ25.2.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B546:AW549", col_names = FALSE)
+LZ25.2.400 <- t(LZ25.2.400)
+colnames(LZ25.2.400) <- c("time","temp", "mean", "stdev")
+LZ25.2.400 <- as.data.frame(LZ25.2.400)
+LZ25.2.400$id <- as.factor(rep("LZ25.2.400",48))
+
+LZ25.3.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B556:AW559", col_names = FALSE)
+LZ25.3.400 <- t(LZ25.3.400)
+colnames(LZ25.3.400) <- c("time","temp", "mean", "stdev")
+LZ25.3.400 <- as.data.frame(LZ25.3.400)
+LZ25.3.400$id <- as.factor(rep("LZ25.3.400",48))
+
+LZ28.1.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B566:AW569", col_names = FALSE)
+LZ28.1.400 <- t(LZ28.1.400)
+colnames(LZ28.1.400) <- c("time","temp", "mean", "stdev")
+LZ28.1.400 <- as.data.frame(LZ28.1.400)
+LZ28.1.400$id <- as.factor(rep("LZ28.1.400",48))
+
+LZ28.2.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B576:AW579", col_names = FALSE)
+LZ28.2.400 <- t(LZ28.2.400)
+colnames(LZ28.2.400) <- c("time","temp", "mean", "stdev")
+LZ28.2.400 <- as.data.frame(LZ28.2.400)
+LZ28.2.400$id <- as.factor(rep("LZ28.2.400",48))
+
+LZ28.3.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B586:AW589", col_names = FALSE)
+LZ28.3.400 <- t(LZ28.3.400)
+colnames(LZ28.3.400) <- c("time","temp", "mean", "stdev")
+LZ28.3.400 <- as.data.frame(LZ28.3.400)
+LZ28.3.400$id <- as.factor(rep("LZ28.3.400",48))
+
+LZ29.1.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B596:AW599", col_names = FALSE)
+LZ29.1.400 <- t(LZ29.1.400)
+colnames(LZ29.1.400) <- c("time","temp", "mean", "stdev")
+LZ29.1.400 <- as.data.frame(LZ29.1.400)
+LZ29.1.400$id <- as.factor(rep("LZ29.1.400",48))
+
+LZ29.2.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B606:AW609", col_names = FALSE)
+LZ29.2.400 <- t(LZ29.2.400)
+colnames(LZ29.2.400) <- c("time","temp", "mean", "stdev")
+LZ29.2.400 <- as.data.frame(LZ29.2.400)
+LZ29.2.400$id <- as.factor(rep("LZ29.2.400",48))
+
+LZ29.3.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B616:AW619", col_names = FALSE)
+LZ29.3.400 <- t(LZ29.3.400)
+colnames(LZ29.3.400) <- c("time","temp", "mean", "stdev")
+LZ29.3.400 <- as.data.frame(LZ29.3.400)
+LZ29.3.400$id <- as.factor(rep("LZ29.3.400",48))
+
+LZ30.1.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B626:AW629", col_names = FALSE)
+LZ30.1.400 <- t(LZ30.1.400)
+colnames(LZ30.1.400) <- c("time","temp", "mean", "stdev")
+LZ30.1.400 <- as.data.frame(LZ30.1.400)
+LZ30.1.400$id <- as.factor(rep("LZ30.1.400",48))
+
+LZ30.2.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B636:AW639", col_names = FALSE)
+LZ30.2.400 <- t(LZ30.2.400)
+colnames(LZ30.2.400) <- c("time","temp", "mean", "stdev")
+LZ30.2.400 <- as.data.frame(LZ30.2.400)
+LZ30.2.400$id <- as.factor(rep("LZ30.2.400",48))
+
+LZ30.3.400 <- read_excel("Matt_T lysis curve_2022092.xlsx", range = "B646:AW649", col_names = FALSE)
+LZ30.3.400 <- t(LZ30.3.400)
+colnames(LZ30.3.400) <- c("time","temp", "mean", "stdev")
+LZ30.3.400 <- as.data.frame(LZ30.3.400)
+LZ30.3.400$id <- as.factor(rep("LZ30.3.400",48))
+
+```
+
+# mean, stdev, time conversion
+
+
+```{r}
+##AG this chunk does this 
+
+## to transform the time
+
+timeseconds <- LZ25.1.100$time # just using the first as an example, all were taken at the same time, convert easily
+timeminutes <- timeseconds/60
+timehours <- timeminutes/60
+
+# LZ.100 <- rbind(control,LZ25.1.100,LZ25.2.100,LZ25.3.100, LZ28.1.100, LZ28.2.100, LZ28.3.100, LZ29.1.100, LZ29.2.100,LZ29.3.100,LZ30.1.100, LZ30.2.100, LZ30.3.100)
+# 
+# new <- split(LZ.100, LZ.100$id)
+
+strains <- c(25, 28, 29, 30)
+dfmaster <- data.frame()
+
+for (k in strains)
+
+for (j in 1:4){  # looping over the LZ25.2.J so 100 to 400 dilutions
+  
+meantry <- matrix(nrow=48, ncol=3)
+
+for (i in 1:48){
+  # eval(str2expression(paste0("new$",paste0("LZ25.1.",j,"00"),"$mean")))
+  
+  meantry[i,1] <- mean(eval((str2expression(paste0("LZ",k,".1.",j,"00","$mean[",i,"]")))))
+  meantry[i,2] <- mean(eval((str2expression(paste0("LZ",k,".2.",j,"00","$mean[",i,"]")))))
+  meantry[i,3] <- mean(eval((str2expression(paste0("LZ",k,".3.",j,"00","$mean[",i,"]")))))
+}
+
+od <- rowSums(meantry)
+
+od <- od -0.1  # normalizing based on average value from blank
+
+id <- rep(paste0("LZ",k,".",j,"00"),48)
+
+df <- data.frame(id,od,timehours)
+
+assign(paste0("LZ",k,".",j,"00"), df)
+
+dfmaster <- append(df) # Here is where I stopped -- how to write to a dataframe that continuously rbinds --
+
+}
+# eval((str2expression(paste0("new$",paste0("LZ25.1.",j,"00"),"$mean")))[1])
+
+# eval(as.name(paste0("new$",paste0("LZ25.1.",j,"00"),"$mean")))
+# 
+# paste0(new$(paste0("LZ25.1.",j,"00"))$mean)
+# 
+# eval(as.name(paste0("new$",paste0("LZ25.1.",j,"00"),"$mean")))
+# eval(new$LZ25.1.100$mean)
+
+for (k in strains )
+  
+  
+
+LZ.100 <- rbind(control,LZ25.1.100,LZ25.2.100,LZ25.3.100, LZ28.1.100, LZ28.2.100, LZ28.3.100, LZ29.1.100, LZ29.2.100,LZ29.3.100,LZ30.1.100, LZ30.2.100, LZ30.3.100)
+
+LZ.100$id <- as.factor(LZ.100$id)
+
+p1 <- ggplot(data=LZ.100, mapping = aes(x= time, y= mean, color = id)) + geom_line() 
+p1
+
+ggsave("1_100growth.png", plot = last_plot(), )
+
+```

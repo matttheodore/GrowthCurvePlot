@@ -1,0 +1,87 @@
+---
+title: "datatrial"
+author: "Arihan Gupta"
+date: "10/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(ggplot2)
+library(readxl)
+library(matrixStats)
+strains <- c("25", "28", "29", "30")
+rowNum = 180
+dfMasters <- data.frame()
+time <- read_excel("Matt_T lysis curve_2022092.xlsx" col_names = FALSE)
+time <- t(time)
+colnames(time) <- "time"
+time <- as.data.frame(time)
+timeminutes <- time/60
+timehours <- timeminutes/60
+time<-timehours
+time
+```
+
+```{r}
+rowNum = 180
+for (dilution in 1:4)
+{
+  for (strain in strains)
+  {
+    df <- time
+    
+    for(triplicate in 1:3)
+    {
+      
+      data <- read_excel("Matt_T lysis curve_2022092.xlsx", range = paste0("B", rowNum,":AW",rowNum+2), col_names = FALSE)
+      data <- t(data)
+      data <- as.data.frame(data)
+      df <- cbind(df, data)
+      rowNum <- rowNum + 10
+    }
+    #LZ25.1.100$mean <- rep(NA, 48) #for previous data clean
+    df <- df[,-1]
+    od <- rowMeans(df, na.rm = TRUE)
+    od <- as.data.frame(od)
+    dfmat <- data.matrix(df)
+    stddev <- rowSds(dfmat, na.rm = TRUE)
+    stddev <- as.data.frame(stddev)
+    id <- rep(paste0("LZ",strain),48)
+    id <- as.data.frame(id)
+    dil <- rep(paste0(dilution,"00"),48)
+    dil <- as.data.frame(dil)
+    dfFinal <- data.frame(id, dil, time, df, od, stddev)
+    dfMasters <- rbind(dfMasters, dfFinal)
+  }
+}
+dfMasters <- dfMasters[, -c(4:12)]
+```
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+p1 <- ggplot(data = dfMasters, mapping = aes(x= time, y= od, color = dil)) + geom_line() + geom_errorbar(aes(ymin = od-stddev, ymax = od+stddev,width = 0.2)) + facet_wrap(~id)
+p1
+
+ggsave("Arihan_uncorrected_growth.png", plot = last_plot(), )
+
+#also a log plot
+
+p1log <- ggplot(data = dfMasters, mapping = aes(x= time, y= log(od), color = dil)) + geom_line() + facet_wrap(~id)
+p1log
+
+ggsave("Arihan_uncorrected_growth_log.png", plot = last_plot(), )
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

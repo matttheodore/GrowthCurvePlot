@@ -1,0 +1,108 @@
+---
+title: "datatrial"
+author: "Arihan Gupta"
+date: "10/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(ggplot2)
+library(readxl)
+library(matrixStats)
+strains <- c("control.1", "control.2", "control.3", "control.4", "control.5", "control.6", "control.7", "control.8", "control.9", "control.10", "control.11", "control.12", "25.1.100", "28.1.100", "29.1.100", "30.1.100", "25.2.100", "28.2.100", "29.2.100", "30.2.100", "25.3.100", "28.3.100", "29.3.100", "30.3.100", "25.1.200", "28.1.200", "29.1.200", "30.1.200", "25.2.200", "28.2.200", "29.2.200", "30.2.200", "25.3.200", "28.3.200", "29.3.200", "30.3.200", "25.1.300", "28.1.300", "29.1.300", "30.1.300", "25.2.300", "28.2.300", "29.2.300", "30.2.300", "25.3.300", "28.3.300", "29.3.300", "30.3.300", "25.1.400", "28.1.400", "29.1.400", "30.1.400", "25.2.400", "28.2.400", "29.2.400", "30.2.400", "25.3.400", "28.3.400", "29.3.400", "30.3.400")
+rowNum = 58
+dfMasters <- data.frame()
+time <- read_excel("Matt_T lysis curve_2022092.xlsx", range = paste0("B", 56,":AW",56), col_names = FALSE)
+time <- t(time)
+colnames(time) <- "time"
+time <- as.data.frame(time)
+timeminutes <- time/60
+timehours <- timeminutes/60
+time<-timehours
+time
+```
+
+```{r}
+
+df <- time
+
+
+
+
+  for (strain in strains)
+  {
+   
+    
+      
+      data <- read_excel("Matt_T_lysis_curve_10-10-22.xlsx", range = paste0("B", rowNum,":AW",rowNum+10), col_names = FALSE)
+      data <- t(data)
+      data <- as.data.frame(data)
+      df <- cbi
+      
+      nd(df, data)
+  
+    #LZ25.1.100$mean <- rep(NA, 48) #for data clean previously
+    df <- df[,-1]
+    od <- df
+    od <- as.data.frame(od)
+    # dfmat <- data.matrix(df)
+    stddev <- NA
+    stddev <- as.data.frame(stddev)
+    id <- rep(paste0("LZ",strain),(48))
+    id <- as.data.frame(id)
+    dil <- NA  # didnt want to take it out
+    dil <- as.data.frame(dil)
+    dfFinal <- data.frame(id, dil, time, df, od, stddev)
+    dfMasters <- rbind(dfMasters, dfFinal)
+  }
+    
+dfMasters <- dfMasters[, -c(4:12)]
+```
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+p1 <- ggplot(data = dfMasters, mapping = aes(x= time, y= od, color = dil)) + geom_line() + geom_errorbar(aes(ymin = od-stddev, ymax = od+stddev,width = 0.2)) + facet_wrap(~id)
+p1
+
+ggsave("Arihan_uncorrected_10-11-22_growth.png", plot = last_plot(), )
+
+#also a log plot
+
+p1log <- ggplot(data = dfMasters, mapping = aes(x= time, y= log(od), color = dil)) + geom_line() + facet_wrap(~id)
+p1log
+
+ggsave("Arihan_uncorrected_10-11-22_growth_log.png", plot = last_plot(), )
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+#Checking bad rows
+
+good.times <- subset(dfMasters, dfMasters$time > 23.5)
+
+
+
+
+
+
+```
+
+
+```{r, include = FALSE}
+
+5+5
+
+```
